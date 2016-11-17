@@ -1,5 +1,5 @@
 class Transformer
-	constructor : (@x=0, @y=0, @a=0, @s=1, @stack=[]) ->
+	constructor: (@x=0, @y=0, @a=0, @s=1, @stack=[]) ->
 	push : ->
 		@stack.push [@x,@y,@a,@s]
 		push()
