@@ -1,18 +1,19 @@
 class Transformer
 	constructor: (@x=0, @y=0, @a=0, @s=1, @stack=[]) ->
 	push : ->
-		@stack.push [@x,@y,@a,@s]
 		push()
-	pop : ->
-		[@x,@y,@a,@s] = @stack.pop()
+		@stack.push [@x,@y,@a,@s]
+	pop : -> 
 		pop()
-	rotate : (da) ->
-		@a += da
+		[@x,@y,@a,@s] = @stack.pop()
+	rotate : (da) -> 
 		rotate da
-	scale : (ds) ->
-		@s *= ds
+		@a += da
+	scale : (ds) -> 
 		scale ds
-	translate : (dx,dy) ->
+		@s *= ds
+	translate : (dx,dy) -> 
+		translate dx,dy
 		@x += @s * dx * cos(@a) - @s * dy * sin(@a)
 		@y += @s * dy * cos(@a) + @s * dx * sin(@a)
-		translate dx,dy
+		
