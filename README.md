@@ -16,3 +16,6 @@ To find out the current canvas coordinates just use tf.x and tf.y in the draw() 
 tf.a gives the current rotation and tf.s gives the current scale.
 
 This information is of special interest in combination with mouseX and mouseY as these are expressed in canvas coordinates.
+
+Link to HTML Canvas object:
+http://www.w3schools.com/tags/ref_canvas.asp
