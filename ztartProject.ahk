@@ -1,7 +1,7 @@
 xp = 0.6
 yp = 0.9
 
-Run, coffee.cmd -M -b -o js -cw coffee
+Run, coffee.cmd -b --transpile --map -o js/ -cw coffee/
 WinWait, ahk_class ConsoleWindowClass
 WinActivate, ahk_class ConsoleWindowClass
 WinMove A,, A_ScreenWidth*xp, 0, A_ScreenWidth*(1-xp), A_ScreenHeight*(1-yp)
