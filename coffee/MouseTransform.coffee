@@ -6,8 +6,8 @@ buttons = []
 
 getLocalCoords = -> # tar 3 microsekunder
 	matrix = drawingContext.getTransform()
-	matrix.inverse()
-		.transformPoint(new DOMPoint(mouseX * pixelDensity(),mouseY * pixelDensity()))
+	pd = pixelDensity()
+	matrix.inverse().transformPoint new DOMPoint mouseX * pd,mouseY * pd
 
 setup = ->
 	canvas = createCanvas 400,400
@@ -29,9 +29,9 @@ draw = ->
 		button.draw()
 
 mouseClicked = ->
-	p = getLocalCoords()
+	{x,y} = getLocalCoords()
 	for button in buttons
-		if button.inside(p.x,p.y) then console.log 'Clicked',p.x,p.y
+		if button.inside(x,y) then console.log 'Clicked',x,y
 
 class Button
 	constructor : (@x,@y,@w,@h,@bg) ->
@@ -42,6 +42,6 @@ class Button
 		@x-@w/2 <= x <= @x+@w/2 and @y-@h/2 <= y <= @y+@h/2
 
 mouseMoved = ->
-	p = getLocalCoords()
+	{x,y} = getLocalCoords()
 	for button in buttons
-		button.bg = if button.inside(p.x, p.y) then 'red' else 'white'
+		button.bg = if button.inside(x, y) then 'red' else 'white'
