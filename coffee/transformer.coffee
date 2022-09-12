@@ -16,4 +16,6 @@ class Transformer
 		translate dx,dy
 		@x += @s * dx * cos(@a) - @s * dy * sin(@a)
 		@y += @s * dy * cos(@a) + @s * dx * sin(@a)
+	dump : ->
+		console.log @x,@y,@a,@s
 		
