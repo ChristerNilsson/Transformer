@@ -1,4 +1,6 @@
 buttons = {}
+SCALE = 3
+AR = 1.5 # Aspect Ratio
 
 # Löser problemet! Transformeringar behöver inte skötas!
 # Alternativ som fungerar lika bra, men kräver mer kod.
@@ -9,37 +11,24 @@ getLocalCoords = -> # tar 3 microsekunder
 	pd = pixelDensity()
 	matrix.inverse().transformPoint new DOMPoint mouseX * pd,mouseY * pd
 
-# procentuella versioner:
-pw = (x) -> x/100 * height
-ph = (y) -> y/100 * width
-pd = (s) -> s/100 * sqrt width*width + height*height
-pimage = (img,x,y,w,h) -> image img, pw(x), ph(y), pw(w), ph(h)
-prect = (x,y,w,h) -> rect pw(x), ph(y), pw(w), ph(h)
-ptext = (t,x,y) -> text t, pw(x), ph(y)
-ptextSize = (s) -> textSize pd(s)
-ptranslate = (x,y) -> translate pw(x), ph(y)
-
 setup = ->
-	canvas = createCanvas 300,200
+	createCanvas SCALE*100,SCALE*150
 	rectMode CENTER
 	angleMode DEGREES
 	textAlign CENTER,CENTER
 
-	w = width
-	h = height
-	q = h/10 # höjden på knapparna i mitten
+	# procent
+	buttons.left  = new Button 'left', 50,AR*22,100,AR*44,'white'
+	buttons.pause = new Button 'pause',25,AR*50, 50,AR*12,'white'
+	buttons.edit  = new Button 'edit', 75,AR*50, 50,AR*12,'white'
+	buttons.right = new Button 'right',50,AR*78,100,AR*44,'white'
 
-	buttons.left = new Button 'left',0,q-h/2,h,(w-q)/2,'white'
-	buttons.pause = new Button 'pause',-h/4,0,h/2,q,'white'
-	buttons.edit = new Button 'edit',h/4,0,h/2,q,'white'
-	buttons.right = new Button 'right',0,h/2-q,h,(w-q)/2,'white'
 	buttons.left.inverted = true
 
 draw = -> 
 	background 'black'
-
-	rotate 90
-	translate height/2,-width/2
+	scale SCALE
+	strokeWeight 1/SCALE
 	buttons.pause.draw()
 	buttons.edit.draw()
 	buttons.right.draw()
