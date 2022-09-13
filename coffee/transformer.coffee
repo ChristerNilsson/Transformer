@@ -1,3 +1,4 @@
+# Troligen helt oanvändbar för mushanteringen.
 class Transformer
 	constructor: (@x=0, @y=0, @a=0, @s=1, @stack=[]) ->
 	push : ->

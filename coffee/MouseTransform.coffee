@@ -1,6 +1,7 @@
 buttons = {}
 SCALEX = 1
 SCALEY = 1
+TOGGLE = 1 # 0=porträtt 1=landskap
 
 # Löser problemet! Transformeringar behöver inte skötas!
 # Alternativ som fungerar lika bra, men kräver mer kod.
@@ -12,8 +13,7 @@ getLocalCoords = -> # tar 3 microsekunder
 	matrix.inverse().transformPoint new DOMPoint mouseX * pd,mouseY * pd
 
 class Button
-	constructor : (@text,@x,@y,@w,@h,@bg) ->
-		@inverted = false
+	constructor : (@text,@x,@y,@w,@h,@bg) -> @inverted = false
 	draw : ->
 		fill @bg
 		rect @x,@y,@w,@h
@@ -27,25 +27,24 @@ class Button
 			pop()
 		else
 			text @text,@x,@y
-	inside : (x,y) -> -@w/2 <= x-@x <= @w/2 and -@h/2 <= y-@y <= @h/2
+	inside : (x,y) -> -@w/2 <= x-@x < @w/2 and -@h/2 <= y-@y < @h/2
 
 windowResized = ->
 	resizeCanvas innerWidth, innerHeight
-	SCALEY = width/100
-	SCALEX = height/100
+	SCALEY = if TOGGLE==0 then height/100 else width/100
+	SCALEX = if TOGGLE==0 then width/100 else height/100
 	diag = sqrt width*width + height*height
-	console.log 'resized',width,height,SCALEX,SCALEY
+	#console.log 'resized',width,height,SCALEX,SCALEY
 
 setup = ->
 	createCanvas 100,100 # innerWidth,innerHeight
-	SCALEY = width/100
-	SCALEX = height/100
+	SCALEY = if TOGGLE==0 then height/100 else width/100
+	SCALEX = if TOGGLE==0 then width/100 else height/100
 	console.log 'setup',width,height,SCALEX,SCALEY
 	rectMode CENTER
 	angleMode DEGREES
 	textAlign CENTER,CENTER
 
-	# rectMode CENTER
 	buttons.left  = new Button 'left', 50,22,100,44,'white'
 	buttons.pause = new Button 'pause',25,50, 50,12,'white'
 	buttons.edit  = new Button 'edit', 75,50, 50,12,'white'
@@ -55,9 +54,10 @@ setup = ->
 
 draw = -> 
 	background 'black'
-	translate -50,-50 # tillbaka till origo
-	rotate 90  # vänd
-	translate 50,-(50+width) # tillbaka till x,y
+	if TOGGLE == 1
+		translate 50,50 # flytta koordinatsystemet till sidans mittpunkt
+		rotate 90  # rotera koordinatsystemet
+		translate -50,50-width # width # flytta tillbaks
 
 	scale SCALEX,SCALEY
 	strokeWeight 1/SCALEX
