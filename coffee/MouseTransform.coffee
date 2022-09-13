@@ -1,6 +1,6 @@
 buttons = {}
-SCALE = 3
-AR = 1.5 # Aspect Ratio
+SCALEX = 1
+SCALEY = 1
 
 # Löser problemet! Transformeringar behöver inte skötas!
 # Alternativ som fungerar lika bra, men kräver mer kod.
@@ -10,36 +10,6 @@ getLocalCoords = -> # tar 3 microsekunder
 	matrix = drawingContext.getTransform()
 	pd = pixelDensity()
 	matrix.inverse().transformPoint new DOMPoint mouseX * pd,mouseY * pd
-
-setup = ->
-	createCanvas SCALE*100,SCALE*150
-	rectMode CENTER
-	angleMode DEGREES
-	textAlign CENTER,CENTER
-
-	# procent
-	buttons.left  = new Button 'left', 50,AR*22,100,AR*44,'white'
-	buttons.pause = new Button 'pause',25,AR*50, 50,AR*12,'white'
-	buttons.edit  = new Button 'edit', 75,AR*50, 50,AR*12,'white'
-	buttons.right = new Button 'right',50,AR*78,100,AR*44,'white'
-
-	buttons.left.inverted = true
-
-draw = -> 
-	background 'black'
-	scale SCALE
-	strokeWeight 1/SCALE
-	buttons.pause.draw()
-	buttons.edit.draw()
-	buttons.right.draw()
-	buttons.left.draw()
-
-mouseClicked = ->
-	{x,y} = getLocalCoords()
-	console.log x,y
-	for key of buttons
-		button = buttons[key]
-		if button.inside(x,y) then console.log 'Clicked',key,x,y
 
 class Button
 	constructor : (@text,@x,@y,@w,@h,@bg) ->
@@ -58,6 +28,50 @@ class Button
 		else
 			text @text,@x,@y
 	inside : (x,y) -> -@w/2 <= x-@x <= @w/2 and -@h/2 <= y-@y <= @h/2
+
+windowResized = ->
+	resizeCanvas innerWidth, innerHeight
+	SCALEY = width/100
+	SCALEX = height/100
+	diag = sqrt width*width + height*height
+	console.log 'resized',width,height,SCALEX,SCALEY
+
+setup = ->
+	createCanvas 100,100 # innerWidth,innerHeight
+	SCALEY = width/100
+	SCALEX = height/100
+	console.log 'setup',width,height,SCALEX,SCALEY
+	rectMode CENTER
+	angleMode DEGREES
+	textAlign CENTER,CENTER
+
+	# rectMode CENTER
+	buttons.left  = new Button 'left', 50,22,100,44,'white'
+	buttons.pause = new Button 'pause',25,50, 50,12,'white'
+	buttons.edit  = new Button 'edit', 75,50, 50,12,'white'
+	buttons.right = new Button 'right',50,78,100,44,'white'
+
+	buttons.left.inverted = true
+
+draw = -> 
+	background 'black'
+	translate -50,-50 # tillbaka till origo
+	rotate 90  # vänd
+	translate 50,-(50+width) # tillbaka till x,y
+
+	scale SCALEX,SCALEY
+	strokeWeight 1/SCALEX
+	buttons.pause.draw()
+	buttons.edit.draw()
+	buttons.right.draw()
+	buttons.left.draw()
+	
+mouseClicked = ->
+	{x,y} = getLocalCoords()
+	console.log x,y
+	for key of buttons
+		button = buttons[key]
+		if button.inside(x,y) then console.log 'Clicked',key,x,y
 
 mouseMoved = ->
 	{x,y} = getLocalCoords()
